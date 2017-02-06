@@ -18,11 +18,11 @@ import java.io.IOException;
 
 public class MusicHelper {
     private MediaPlayer mediaPlayer;
-
     private SoundPool mSoundPool;
     private int mSoundID;
     private boolean mLoaded;
     private float mVolume;
+    private int position;
 
     public MusicHelper(Activity activity) {
 
@@ -71,12 +71,22 @@ public class MusicHelper {
     public void pauseMusic(){
         if(mediaPlayer!=null){
             mediaPlayer.pause();
+            mediaPlayer.getCurrentPosition();
         }
     }
 
     public void stopMusic(){
         if(mediaPlayer!=null){
-            mediaPlayer.stop();
+            mediaPlayer.pause();
+            position = mediaPlayer.getCurrentPosition();
         }
     }
+
+    public void resumeMusic(){
+        if(mediaPlayer!=null){
+            mediaPlayer.start();
+            mediaPlayer.seekTo(position);
+        }
+    }
+
 }
