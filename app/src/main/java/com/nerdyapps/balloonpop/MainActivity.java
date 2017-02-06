@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements BalloonListener {
     protected void onResume() {
         super.onResume();
         setToFullScreen();
-        musicHelper.playMusic();
+        musicHelper.resumeMusic();
     }
 
     @Override
