@@ -20,23 +20,9 @@ import java.util.List;
 
 public class GameActivity extends AppCompatActivity implements GameListener {
     private static final int BALLOONS_PER_LEVEL = 10;
-    ViewGroup contentView;
-    private int colors[];
-    //  private int score;
-    private int pinsUsed;
-    public static final int MIN_ANIMATION_DELAY = 500;
-    public static final int MAX_ANIMATION_DELAY = 1500;
-    public static final int MIN_ANIMATION_DURATION = 1000;
-    public static final int MAX_ANIMATION_DURATION = 8000;
-    private int level;
-    private int currentColor, screenWidth, screenHeight;
+
     private TextView levelDisplay, scoreDisplay;
-    private List<Pin> pins = new ArrayList<>();
-    private List<Balloon> balloons = new ArrayList<>();
     private Button goButton;
-    private boolean playing;
-    private boolean gameStopped = true;
-    private int balloonPoppedNumber;
     private MusicHelper musicHelper;
     private GameView gameView;
     private ViewGroup parentLayout;
@@ -46,10 +32,6 @@ public class GameActivity extends AppCompatActivity implements GameListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setToFullScreen();
-        colors = new int[3];
-        colors[0] = Color.argb(255, 255, 0, 0);
-        colors[1] = Color.argb(255, 0, 255, 0);
-        colors[2] = Color.argb(255, 0, 0, 255);
         parentLayout = (ViewGroup) findViewById(R.id.activity_game);
         gameView = new GameView(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -57,39 +39,9 @@ public class GameActivity extends AppCompatActivity implements GameListener {
         gameView.setLayoutParams(params);
         parentLayout.addView(gameView);
         gameView.addGameListener(this);
-//
-//
-//        parentLayout.addView(gameView);
 
-//        final ViewTreeObserver observer = contentView.getViewTreeObserver();
-//        if (observer.isAlive()) {
-//            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                @Override
-//                public void onGlobalLayout() {
-//                    contentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                    screenHeight = contentView.getHeight();
-//                    screenWidth = contentView.getWidth();
-//                }
-//            });
-//        }
-//        contentView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setToFullScreen();
-//            }
-//        }); contentView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setToFullScreen();
-//            }
-//        });
         goButton = (Button) findViewById(R.id.go_button);
         //TODO
-//        pins.add((ImageView) findViewById(R.id.pushpin1));
-//        pins.add((ImageView) findViewById(R.id.pushpin2));
-//        pins.add((ImageView) findViewById(R.id.pushpin3));
-//        pins.add((ImageView) findViewById(R.id.pushpin4));
-//        pins.add((ImageView) findViewById(R.id.pushpin5));
         levelDisplay = (TextView) findViewById(R.id.level_display);
         scoreDisplay = (TextView) findViewById(R.id.score_display);
         musicHelper = new MusicHelper(this);

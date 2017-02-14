@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.nerdyapps.balloonpop.BalloonListener;
+import com.nerdyapps.balloonpop.BalloonManipulator;
 import com.nerdyapps.balloonpop.R;
 import com.nerdyapps.balloonpop.listeners.GameListener;
 import com.nerdyapps.balloonpop.listeners.GameStatePublisher;
@@ -112,26 +113,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     }
 
-//    private void launchBalloons(long timeElapsed) {
-//        new Handler().post(new Runnable() {
-//            @Override
-//            public void run() {
-//                //   if(timeElapsed>2000 && launchedBalloons<=3){
-//               // Log.d("Time!",timeElapsed+"");
-//                int duration = Math.min(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
-//                Balloon balloon = new Balloon(GameView.this.context, width, height, colors[generator.nextInt(10)],duration);
-//                balloons.add(balloon);
-//                launchedBalloons++;
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        //  }
-//    }
 
     private void update() {
 
@@ -200,44 +181,12 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         playing = true;
         level++;
         Log.d("Level!",level+"");
-        BalloonLauncher launcher = new BalloonLauncher();
-        launcher.execute(level);
-        //int balloonsLimit =
-//        for (int i = 0; i < 3; i++) {
-//            Log.d("BOUNDS!:", "Width: " + width + " - Height: " + height);
-//            int duration = Math.min(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
-//            Balloon balloon = new Balloon(GameView.this.context, width, height, colors[generator.nextInt(10)],duration);
-//            //Log.d("BALLOON!", i + " - X: " + balloon.getX() + " - Y: " + balloon.getY() + " Speed: " + balloon.getSpeed());
-//            balloons.add(balloon);
-////                    try {
-////                        Thread.sleep(100);
-////
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-//        }
+//        BalloonLauncher launcher = new BalloonLauncher();
+//        launcher.execute(level);
+        BalloonManipulator manipulator = new BalloonManipulator(context,balloons,level,width,height,playing);
+        manipulator.start();
         gameThread = new Thread(this);
         gameThread.start();
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = 0; i < 3; i++) {
-//                    Log.d("BOUNDS!:", "Width: " + width + " - Height: " + height);
-//                    int duration = Math.min(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
-//                    Balloon balloon = new Balloon(GameView.this.context, width, height, colors[generator.nextInt(10)],duration);
-//                    //Log.d("BALLOON!", i + " - X: " + balloon.getX() + " - Y: " + balloon.getY() + " Speed: " + balloon.getSpeed());
-//                    balloons.add(balloon);
-////                    try {
-////                        Thread.sleep(100);
-////
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-//                }
-//            }
-//        },100);
-
 
     }
 
