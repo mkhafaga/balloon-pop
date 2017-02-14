@@ -59,7 +59,7 @@ public class MusicHelper {
         }
     }
     public void prepareMusic(Context context){
-        mediaPlayer =  MediaPlayer.create(context.getApplicationContext(), R.raw.pleasant_music);
+        mediaPlayer =  MediaPlayer.create(context.getApplicationContext(), R.raw.bensound_cute);
         mediaPlayer.setVolume(0.5f,0.5f);
         mediaPlayer.setLooping(true);
     }

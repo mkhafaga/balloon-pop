@@ -1,6 +1,8 @@
 package com.nerdyapps.balloonpop.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 /**
@@ -9,8 +11,9 @@ import android.util.TypedValue;
 
 public class PixelHelper {
     public static int pixelsToDp(int px, Context context) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, px,
-                context.getResources().getDisplayMetrics());
+        Resources r = context.getResources();
+        DisplayMetrics metrics = r.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return (int) dp;
     }
 }

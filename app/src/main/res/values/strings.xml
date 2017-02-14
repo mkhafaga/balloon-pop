@@ -8,5 +8,12 @@
     <string name="score_label">Score:</string>
     <string name="max_number">99</string>
     <string name="play_game">Play game</string>
+    <string name="resume_game">Resume game</string>
+    <string name="pause_game">Pause game</string>
     <string name="popping_pin">Popping Pin</string>
+    <string name="start_level">Start level %d</string>
+
+    <string name="title_activity_splash">Splash</string>
+    <string name="play_now">Play Now</string>
+    <string name="highscores">High Scores</string>
 </resources>

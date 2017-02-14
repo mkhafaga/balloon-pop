@@ -1,5 +1,7 @@
 package com.nerdyapps.balloonpop;
 
+import com.nerdyapps.balloonpop.sprites.Balloon;
+
 /**
  * Created by mohamedkhafaga on 2/4/17.
  */
