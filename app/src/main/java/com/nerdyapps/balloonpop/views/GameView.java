@@ -65,6 +65,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private int[] colors;
     private MusicHelper musicHelper;
     private volatile boolean paused;
+    private long now;
+    private long before;
     private GameStatePublisher gameStatePublisher = new GameStatePublisher();
 
     public GameView(Context context) {
@@ -101,9 +103,11 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void run() {
+        before = System.currentTimeMillis();
         while (playing) {
             //launchBalloons(timeElapsed);
             //timeElapsed=System.currentTimeMillis();
+            LaunchBalloons();
             update();
             draw();
             control();
@@ -113,25 +117,35 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     }
 
+    private void LaunchBalloons() {
+        now = System.currentTimeMillis();
+        if (now - before >= (350+generator.nextInt(1000)) && launchedBalloons < balloonsForCurrentLevel) {
+            before = now;
+            int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
+            Balloon balloon = new Balloon(context, width, height, colors[generator.nextInt(10)], level);
+            balloons.add(balloon);
+            launchedBalloons++;
+        }
+    }
 
     private void update() {
 
         if (balloons.isEmpty() && !gameOver) {
             gameStatePublisher.fireLevelFinished(level);
         }
-//            for (int i=0;i<balloons.size();i++)
-//                balloons.get(i).update();
+        for (int i = 0; i < balloons.size(); i++)
+            balloons.get(i).update();
 
         for (int i = balloons.size() - 1; i >= 0; i--) {
             Balloon balloon = balloons.get(i);
-            Log.d("Top!",balloon.getBounds().top+"");
-            if (balloon!=null && balloon.getBounds().top <= 0) {
+            Log.d("Top!", balloon.getBounds().top + "");
+            if (balloon != null && balloon.getBounds().top <= 0) {
                 balloons.remove(i);
                 musicHelper.playSound();
                 usedPins++;
             }
         }
-       // Log.d("PINS!", usedPins + "");
+        // Log.d("PINS!", usedPins + "");
         if (usedPins == 5) {
             // ((Button)((Activity)context).findViewById(R.id.go_button)).setText("Game Over");
             playing = false;
@@ -180,11 +194,14 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void startLevel() {
         playing = true;
         level++;
-        Log.d("Level!",level+"");
+        Log.d("Level!", level + "");
+        balloonsForCurrentLevel = level * 10;
+        launchedBalloons = 0;
+        Log.d("B!", balloonsForCurrentLevel + "");
 //        BalloonLauncher launcher = new BalloonLauncher();
 //        launcher.execute(level);
-        BalloonManipulator manipulator = new BalloonManipulator(context,balloons,level,width,height,playing);
-        manipulator.start();
+//        BalloonManipulator manipulator = new BalloonManipulator(context,balloons,level,width,height,playing);
+//        manipulator.start();
         gameThread = new Thread(this);
         gameThread.start();
 
@@ -257,51 +274,51 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void addGameListener(GameListener gameListener) {
         gameStatePublisher.addGameListener(gameListener);
     }
-
-    private class BalloonLauncher extends AsyncTask<Integer, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Integer... params) {
-
-            if (params.length != 1) {
-                throw new AssertionError(
-                        "Expected 1 param for current level");
-            }
-
-            int level = params[0];
-            int maxDelay = Math.max(MIN_ANIMATION_DELAY,
-                    (MAX_ANIMATION_DELAY - ((level - 1) * 500)));
-            int minDelay = maxDelay / 2;
-
-            int balloonsLaunched = 0;
-            while (playing && balloonsLaunched < 1 * level) {
-
-//              Get a random horizontal position for the next balloon
-                Random random = new Random(new Date().getTime());
-                publishProgress();
-                balloonsLaunched++;
-
-//              Wait a random number of milliseconds before looping
-                int delay = random.nextInt(minDelay) + minDelay;
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
-            Balloon balloon = new Balloon(GameView.this.context, width, height, colors[generator.nextInt(10)], duration);
-            balloons.add(balloon);
-        }
-
-
-    }
+//
+//    private class BalloonLauncher extends AsyncTask<Integer, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Integer... params) {
+//
+//            if (params.length != 1) {
+//                throw new AssertionError(
+//                        "Expected 1 param for current level");
+//            }
+//
+//            int level = params[0];
+//            int maxDelay = Math.max(MIN_ANIMATION_DELAY,
+//                    (MAX_ANIMATION_DELAY - ((level - 1) * 500)));
+//            int minDelay = maxDelay / 2;
+//
+//            int balloonsLaunched = 0;
+//            while (playing && balloonsLaunched < 1 * level) {
+//
+////              Get a random horizontal position for the next balloon
+//                Random random = new Random(new Date().getTime());
+//                publishProgress();
+//                balloonsLaunched++;
+//
+////              Wait a random number of milliseconds before looping
+//                int delay = random.nextInt(minDelay) + minDelay;
+//                try {
+//                    Thread.sleep(delay);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            return null;
+//
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(Void... values) {
+//            int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (level * 1000));
+//            Balloon balloon = new Balloon(GameView.this.context, width, height, colors[generator.nextInt(10)], duration);
+//            balloons.add(balloon);
+//        }
+//
+//
+//    }
 
 }
