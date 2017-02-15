@@ -21,10 +21,10 @@ import java.util.Random;
  * Created by mohamedkhafaga on 2/3/17.
  */
 
-public class Balloon implements  ValueAnimator.AnimatorUpdateListener{
+public class Balloon {
     private final int color;
     private int x;
-   // private int speed;
+    private int speed;
     private Rect bounds;
     private int y;
     private Bitmap bitmap;
@@ -33,22 +33,22 @@ public class Balloon implements  ValueAnimator.AnimatorUpdateListener{
     private int screenHeight;
     private long currentAnimationTime;
 
-    private  ValueAnimator animator;
-    public Balloon(Context context, int screenWidth,int screenHeight, int color, int duration){
+    //private  ValueAnimator animator;
+    public Balloon(Context context, int screenWidth,int screenHeight, int color, int level){
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon);
         bitmap = Bitmap.createScaledBitmap(bitmap, PixelHelper.pixelsToDp(bitmap.getWidth(), context), PixelHelper.pixelsToDp(bitmap.getHeight(),context), true);
         generator = new Random();
         x = generator.nextInt(screenWidth-bitmap.getWidth());
         y = screenHeight;
-       /// speed =  3+generator.nextInt(level*3);
-        animator =  ValueAnimator.ofInt(screenHeight,0);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(this);
-        animator.setTarget(this);
-        animator.setDuration(duration);
+        speed = 3;// 3+generator.nextInt(level*3);
+//        animator =  ValueAnimator.ofInt(screenHeight,0);
+//        animator.setInterpolator(new LinearInterpolator());
+//        animator.addUpdateListener(this);
+//        animator.setTarget(this);
+//        animator.setDuration(duration);
         bounds = new Rect(x,y,x+bitmap.getWidth(),y+bitmap.getHeight());
         this.color  = color;
-        animator.start();
+        //animator.start();
     }
 
     public int getColor() {
@@ -72,24 +72,10 @@ public class Balloon implements  ValueAnimator.AnimatorUpdateListener{
         return bitmap;
     }
 
-    private void update(){
-      //  y-=speed;
-        bounds.top =y;
-    }
-
-    @Override
-    public void onAnimationUpdate(ValueAnimator animation) {
-        int animatedValue =  (Integer) animation.getAnimatedValue();
-        y=animatedValue;
+    public void update(){
+        y-=speed;
         bounds.top = y;
     }
-    public void pauseAnimation(){
-        currentAnimationTime =  animator.getCurrentPlayTime();
-        animator.cancel();
-    }
 
-    public void resumeAnimation(){
-        animator.start();
-        animator.setCurrentPlayTime(currentAnimationTime);
-    }
+
 }
