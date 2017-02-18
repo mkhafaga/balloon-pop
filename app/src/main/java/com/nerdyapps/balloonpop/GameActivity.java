@@ -9,9 +9,14 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.nerdyapps.balloonpop.listeners.GameListener;
 import com.nerdyapps.balloonpop.sprites.Balloon;
 import com.nerdyapps.balloonpop.sprites.Pin;
+import com.nerdyapps.balloonpop.states.State;
 import com.nerdyapps.balloonpop.utils.MusicHelper;
 import com.nerdyapps.balloonpop.views.GameView;
 
@@ -20,7 +25,7 @@ import java.util.List;
 
 public class GameActivity extends AppCompatActivity implements GameListener {
     private static final int BALLOONS_PER_LEVEL = 10;
-
+    private InterstitialAd interstitialAd;
     private TextView levelDisplay, scoreDisplay;
     private Button goButton;
     private MusicHelper musicHelper;
@@ -32,6 +37,16 @@ public class GameActivity extends AppCompatActivity implements GameListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setToFullScreen();
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.balloon_pop_interstitial_ad_unit_id));
+        requestNewInterstitial();
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                requestNewInterstitial();
+            }
+        });
         parentLayout = (ViewGroup) findViewById(R.id.activity_game);
         gameView = new GameView(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -41,13 +56,22 @@ public class GameActivity extends AppCompatActivity implements GameListener {
         gameView.addGameListener(this);
 
         goButton = (Button) findViewById(R.id.go_button);
-        //TODO
         levelDisplay = (TextView) findViewById(R.id.level_display);
         scoreDisplay = (TextView) findViewById(R.id.score_display);
         musicHelper = new MusicHelper(this);
 
         musicHelper.prepareMusic(this);
+        gameView.startGame();
 
+    }
+
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        interstitialAd.loadAd(adRequest);
     }
 
     public void setToFullScreen() {
@@ -64,30 +88,31 @@ public class GameActivity extends AppCompatActivity implements GameListener {
     protected void onResume() {
         super.onResume();
         setToFullScreen();
-        gameView.resume();
-         musicHelper.resumeMusic();
+
+        gameView.resume(State.FORCED);
+        musicHelper.resumeMusic();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-         musicHelper.stopMusic();
-        gameView.stopLevel();
+        musicHelper.stopMusic();
+        gameView.pause(State.FORCED);
     }
 
 
     public void goButtonCLickHandler(View view) {
         Button button = (Button) view;
         if (button.getText().equals(getString(R.string.play_game))) {
-            gameView.startLevel();
+            gameView.startGame();
             button.setText(R.string.pause_game);
         } else if (button.getText().equals(getString(R.string.pause_game))) {
-            gameView.pause();
+            gameView.pause(State.NORMAL);
             button.setText(R.string.resume_game);
-        } else if(button.getText().equals(getString(R.string.resume_game))){
-            gameView.resume();
+        } else if (button.getText().equals(getString(R.string.resume_game))) {
+            gameView.resume(State.NORMAL);
             button.setText(R.string.pause_game);
-        }else{
+        } else {
             gameView.startLevel();
             button.setText(R.string.pause_game);
         }
@@ -100,7 +125,10 @@ public class GameActivity extends AppCompatActivity implements GameListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                goButton.setText("Game Over");
+                goButton.setText(R.string.play_game);
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
             }
         });
 
@@ -132,8 +160,12 @@ public class GameActivity extends AppCompatActivity implements GameListener {
             @Override
             public void run() {
                 goButton.setText(String.format("Start Level %d", level + 1));
+                if (level % 3 == 0 && interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
             }
         });
+
 
     }
 }

@@ -31,24 +31,16 @@ public class Balloon {
     private Random generator;
     private int screenWidth;
     private int screenHeight;
-    private long currentAnimationTime;
 
-    //private  ValueAnimator animator;
-    public Balloon(Context context, int screenWidth,int screenHeight, int color, int level){
+    public Balloon(Context context, int screenWidth, int screenHeight, int color, int level) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon);
-        bitmap = Bitmap.createScaledBitmap(bitmap, PixelHelper.pixelsToDp(bitmap.getWidth(), context), PixelHelper.pixelsToDp(bitmap.getHeight(),context), true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, PixelHelper.pixelsToDp(bitmap.getWidth(), context), PixelHelper.pixelsToDp(bitmap.getHeight(), context), true);
         generator = new Random();
-        x = generator.nextInt(screenWidth-bitmap.getWidth());
+        x = generator.nextInt(screenWidth - bitmap.getWidth());
         y = screenHeight;
-        speed = 3;// 3+generator.nextInt(level*3);
-//        animator =  ValueAnimator.ofInt(screenHeight,0);
-//        animator.setInterpolator(new LinearInterpolator());
-//        animator.addUpdateListener(this);
-//        animator.setTarget(this);
-//        animator.setDuration(duration);
-        bounds = new Rect(x,y,x+bitmap.getWidth(),y+bitmap.getHeight());
-        this.color  = color;
-        //animator.start();
+        speed = 4 + generator.nextInt(level * 6);
+        bounds = new Rect(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
+        this.color = color;
     }
 
     public int getColor() {
@@ -72,8 +64,8 @@ public class Balloon {
         return bitmap;
     }
 
-    public void update(){
-        y-=speed;
+    public void update() {
+        y -= speed;
         bounds.top = y;
     }
 

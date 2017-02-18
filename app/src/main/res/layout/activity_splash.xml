@@ -25,8 +25,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:srcCompat="@drawable/apps"
-        android:layout_below="@+id/nerdy_view"
+        android:id="@+id/imageView"
+        android:layout_alignBottom="@+id/nerdy_view"
         android:layout_toRightOf="@+id/nerdy_view"
         android:layout_toEndOf="@+id/nerdy_view"
-        android:id="@+id/imageView" />
+/>
 </RelativeLayout>

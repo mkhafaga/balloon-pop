@@ -59,7 +59,7 @@ public class MusicHelper {
         }
     }
     public void prepareMusic(Context context){
-        mediaPlayer =  MediaPlayer.create(context.getApplicationContext(), R.raw.bensound_cute);
+        mediaPlayer =  MediaPlayer.create(context.getApplicationContext(), R.raw.ukulele);
         mediaPlayer.setVolume(0.5f,0.5f);
         mediaPlayer.setLooping(true);
     }

@@ -7,13 +7,16 @@
     <string name="level_label">Level:</string>
     <string name="score_label">Score:</string>
     <string name="max_number">99</string>
-    <string name="play_game">Play game</string>
+    <string name="play_game">New game</string>
     <string name="resume_game">Resume game</string>
     <string name="pause_game">Pause game</string>
     <string name="popping_pin">Popping Pin</string>
     <string name="start_level">Start level %d</string>
-
+    <string name="ballon_pop_banner_ad_unit_id">ca-app-pub-7669754857181412/7322719081</string>
+    <string name="ballon_pop_native_ad_unit_id">ca-app-pub-7669754857181412/7556927880</string>
+    <string name="balloon_pop_interstitial_ad_unit_id">ca-app-pub-7669754857181412/7138125486</string>
     <string name="title_activity_splash">Splash</string>
     <string name="play_now">Play Now</string>
     <string name="highscores">High Scores</string>
+    <string name="high_scores">High Scores</string>
 </resources>
